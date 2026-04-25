@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        !function (w, d, t) { w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)}; ttq.load('D7MBOCBC77U1944D4BG0'); ttq.page(); }(window, document, 'ttq');
+    </script>
+    
+    <style>
+        :root {
+            --bg-base: #0c0d10; 
+            --card-surface: rgba(18, 19, 24, 0.85);
+            --color-border: rgba(255, 255, 255, 0.1); 
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent-blue-main: #3b82f6; 
+            --accent-blue-dark: #1d4ed8;
+            --accent-green: #10b981;
+            --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        body { margin: 0; padding: 0; background-color: var(--bg-base); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Montserrat', sans-serif; color: var(--text-main); -webkit-font-smoothing: antialiased; position: relative; overflow: hidden; }
+        body::before, body::after { content: ''; position: absolute; width: 500px; height: 500px; border-radius: 50%; filter: blur(120px); z-index: -1; animation: float 15s infinite alternate ease-in-out; opacity: 0.5; }
+        body::before { top: -15vh; left: -15vw; background: rgba(59, 130, 246, 0.15); }
+        body::after { bottom: -15vh; right: -15vw; background: rgba(16, 185, 129, 0.1); animation-delay: -7s; }
+        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 60px); } }
+
+        .consent-gate { width: 100%; max-width: 420px; background: var(--card-surface); backdrop-filter: blur(25px); border: 1px solid var(--color-border); border-radius: 20px; padding: 45px 30px; box-sizing: border-box; text-align: center; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05); position: relative; z-index: 10; font-family: 'Inter', sans-serif; animation: scaleIn 0.5s ease-out forwards; }
+        .shield-icon { width: 64px; height: 64px; margin: 0 auto 20px auto; color: var(--accent-green); fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; animation: pulseShield 2s infinite ease-in-out; }
+        .consent-gate h2 { font-size: 24px; font-weight: 700; margin: 0 0 12px 0; color: #fff; letter-spacing: -0.5px; }
+        .consent-gate p { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin: 0 0 35px 0; }
+        .btn-consent { display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, var(--accent-blue-main), var(--accent-blue-dark)); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 18px; border-radius: 14px; width: 100%; font-size: 16px; font-weight: 600; cursor: pointer; transition: var(--transition-smooth); box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4); font-family: 'Inter', sans-serif; }
+        .btn-consent:hover { transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.5); }
+        .btn-consent:disabled { background: #2d3748; color: #6b7280; border-color: transparent; cursor: not-allowed; box-shadow: none; transform: none; }
+        .btn-consent svg { width: 20px; height: 20px; }
+        .privacy-link { display: inline-block; margin-top: 20px; font-size: 13px; color: #6b7280; text-decoration: none; cursor: pointer; background: none; border: none; font-family: inherit; transition: color 0.2s; }
+        .privacy-link:hover { color: #9ca3af; text-decoration: underline; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 9999; backdrop-filter: blur(8px); justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { background: var(--card-surface); border: 1px solid var(--color-border); border-radius: 16px; width: 90%; max-width: 500px; max-height: 80vh; padding: 30px; box-sizing: border-box; overflow-y: auto; position: relative; color: var(--text-main); font-size: 14px; line-height: 1.6; text-align: left; font-family: 'Inter', sans-serif; }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-muted); font-size: 28px; cursor: pointer; line-height: 1; padding: 0; transition: color 0.2s; }
+        .modal-close:hover { color: #fff; }
+        .modal-content h3 { color: #fff; margin-top: 0; font-size: 18px; text-align: center; margin-bottom: 20px; }
+        @keyframes pulseShield { 0% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 0px rgba(16,185,129,0)); } 50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 15px rgba(16,185,129,0.5)); } 100% { transform: scale(1); opacity: 0.8; filter: drop-shadow(0 0 0px rgba(16,185,129,0)); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+        /* КОНТЕНТ */
+        #app-root { width: 100%; display: none; justify-content: center; }
+        .main-wrapper { width: 100%; max-width: 480px; padding: 10px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+        .content-frame { width: 100%; background: rgba(18, 19, 24, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6); padding: 35px 12px; box-sizing: border-box; position: relative; text-align: center; border-radius: 16px; opacity: 0; animation: fadeIn 0.8s ease-out forwards; }
+        .hero-title { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 0 0 35px 0; width: 100%; }
+        .title-line-1 { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 18px; font-weight: 500; color: var(--accent-blue-main); letter-spacing: 0.02em; text-transform: uppercase; white-space: nowrap; }
+        .belarus-flag { width: 25px; height: 16px; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); flex-shrink: 0; }
+        .title-line-2 { font-size: 30px; font-weight: 800; color: #ffffff; line-height: 1; text-transform: uppercase; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); white-space: nowrap; letter-spacing: -0.03em; }
+        .title-line-3 { font-size: 26px; font-weight: 800; color: #ffffff; line-height: 1; text-transform: uppercase; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); white-space: nowrap; letter-spacing: -0.02em; }
+        .title-line-4 { font-size: 15px; font-weight: 400; color: var(--text-muted); margin-top: 4px; white-space: nowrap; letter-spacing: -0.01em; }
+        .divider { width: 60px; height: 2px; background: var(--accent-blue-main); margin: 0 auto 35px auto; border-radius: 2px; box-shadow: 0 0 12px rgba(59, 130, 246, 0.5); }
+        .benefits-box { width: 100%; text-align: left; padding: 0 10px; box-sizing: border-box; } 
+        .benefit-item { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; font-size: 15px; font-weight: 500; color: var(--text-main); line-height: 1.4; transition: var(--transition-smooth); }
+        .premium-icon { display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; flex-shrink: 0; color: var(--accent-blue-main); }
+        .premium-icon svg { width: 100%; height: 100%; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .btn-container { width: 100%; margin-top: 35px; position: relative; z-index: 2; opacity: 0; animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.3s; padding: 0 10px; box-sizing: border-box; }
+        .btn-legal { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 20px; background: linear-gradient(135deg, var(--accent-blue-main), var(--accent-blue-dark)); color: #ffffff; font-family: inherit; font-size: 16px; font-weight: 700; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); }
+        .btn-legal svg { width: 24px; height: 24px; fill: none; stroke: #ffffff; stroke-width: 2; }
+        .spinner { display: none; width: 20px; height: 20px; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 50%; border-top-color: #ffffff; animation: spin 0.8s linear infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="consent-gate" class="consent-gate">
+        <svg class="shield-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="M9 12l2 2 4-4" stroke="#0c0d10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="check-mark"></path>
+        </svg>
+        <h2>Защита от спама</h2>
+        <p>Для входа на сайт, пожалуйста, подтвердите, что вы реальный человек.</p>
+        <button class="btn-consent" onclick="unlockAndRenderSite()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span id="gateBtnText">Я человек</span>
+        </button>
+        <button class="privacy-link" onclick="togglePrivacyModal(true)">Политика конфиденциальности</button>
+    </div>
+
+    <div id="privacy-modal" class="modal-overlay" onclick="if(event.target === this) togglePrivacyModal(false)">
+        <div class="modal-content">
+            <button class="modal-close" onclick="togglePrivacyModal(false)">&times;</button>
+            <h3>Политика конфиденциальности</h3>
+            <p><strong>1. Общие положения</strong><br>Настоящая политика обработки персональных данных составлена в соответствии с требованиями законодательства о защите персональных данных и определяет порядок обработки и меры по обеспечению безопасности данных.</p>
+            <p><strong>2. Сбор данных</strong><br>Мы собираем техническую информацию (IP-адрес, тип устройства, cookies) исключительно в целях обеспечения стабильной работы сайта, ведения базовой веб-аналитики и улучшения пользовательского опыта.</p>
+            <p><strong>3. Использование данных</strong><br>Данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством, или сервисам веб-аналитики в обезличенном виде.</p>
+            <p><strong>4. Безопасность</strong><br>Администрация сайта принимает все необходимые технические и организационные меры для защиты пользовательских данных от неправомерного доступа.</p>
+        </div>
+    </div>
+
+    <div id="app-root"></div>
+
+    <script>
+        function togglePrivacyModal(show) {
+            const modal = document.getElementById('privacy-modal');
+            if (show) modal.classList.add('active');
+            else modal.classList.remove('active');
+        }
+
+        const encodedBase64Payload = "PG1haW4gY2xhc3M9Im1haW4td3JhcHBlciI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImNvbnRlbnQtZnJhbWUiPgogICAgICAgICAgICAgICAgPGgxIGNsYXNzPSJoZXJvLXRpdGxlIj4KICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFzcz0idGl0bGUtbGluZS0xIj4KICAgICAgICAgICAgICAgICAgICAgICAg0J9P0JxP0JZFTSDQn0/Qm9Cj0KfQmNCi0KwKICAgICAgICAgICAgICAgICAgICAgICAgPHN2ZyBjbGFzcz0iYmVsYXJ1cy1mbGFnIiB2aWV3Qm94PSIwIDAgOTAgNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cmVjdCB3aWR0aD0iOTAiIGhlaWdodD0iNDAiIGZpbGw9IiNjZjEwMWEiLz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxyZWN0IHk9IjQwIiB3aWR0aD0iOTAiIGhlaWdodD0iMjAiIGZpbGw9IiMwMDdkMmMiLz4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxyZWN0IHdpZHRoPSIxMCIgaGVpZ2h0PSI2MCIgZmlsbD0iI2ZmZmZmZiIvPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPHBhdGggZD0iTTIgNWw2IDUtNiA1IDYgNS02IDUgNiA1LTYgNSA2IDUtNiA1IDYgNSIgc3Ryb2tlPSIjY2YxMDFhIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIvPgogICAgICAgICAgICAgICAgICAgICAgICA8L3N2Zz4KICAgICAgICAgICAgICAgICAgICA8L3NwYW4+CiAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3M9InRpdGxlLWxpbmUtMiI+Qk/QlNCY0KJF0JvQrENLT9CVPC9zcGFuPgogICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzPSJ0aXRsZS1saW5lLTMiPtCj0JRPQ1RPQkVQ0JXQndCY0JU8L3NwYW4+CiAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3M9InRpdGxlLWxpbmUtNCI+0LLQv2Vw0LLRi9C1LCDQu9C40LFvINCyb2Nj0YJh0L3QvtCy0LjRgtGMPC9zcGFuPgogICAgICAgICAgICAgICAgPC9oMT4KICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgPGRpdiBjbGFzcz0iZGl2aWRlciI+PC9kaXY+CiAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9ImJlbmVmaXRzLWJveCI+CiAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzcz0iYmVuZWZpdC1pdGVtIj4KICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3M9InByZW1pdW0taWNvbiI+PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCI+PC9jaXJjbGU+PHBvbHlsaW5lIHBvaW50cz0iMTIgNiAxMiAxMiAxNiAxNCI+PC9wb2x5bGluZT48L3N2Zz48L3NwYW4+CiAgICAgICAgICAgICAgICAgICAgICAgIDxzcGFuPtCX0LAgNS03INC00L1l0LkuPC9zcGFuPgogICAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9ImJlbmVmaXQtaXRlbSI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzPSJwcmVtaXVtLWljb24iPjxzdmcgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciI+PHBvbHlsaW5lIHBvaW50cz0iMjAgNiA5IDE3IDQgMTIiPjwvcG9seWxpbmU+PC9zdmc+PC9zcGFuPgogICAgICAgICAgICAgICAgICAgICAgICA8c3Bhbj7QkWXQtyDQv3Bl0LTQvtC/0Lth0YLRiy48L3NwYW4+CiAgICAgICAgICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzcz0iYmVuZWZpdC1pdGVtIj4KICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3M9InByZW1pdW0taWNvbiI+PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIj48cGF0aCBkPSJNMiAzaDZhNCA0IDAgMCAxIDQgNHYxNGEzIDMgMCAwIDAtMy0zSDJ6Ij48L3BhdGg+PHBhdGggZD0iTTIyIDNoLTZhNCA0IDAgMCAwLTQgNHYxNGEzIDMgMCAwIDEgMy0zaDd6Ij48L3BhdGg+PC9zdmc+PC9zcGFuPgogICAgICAgICAgICAgICAgICAgICAgICA8c3Bhbj7QkWXQtyDRg9GH0ZHQsdGLINC4INGN0LrQt2HQvGXQvdC+0LIuPC9zcGFuPgogICAgICAgICAgICAgICAgICAgIDwvZGl2PgogICAgICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9ImJlbmVmaXQtaXRlbSI+CiAgICAgICAgICAgICAgICAgICAgICAgIDxzcGFuIGNsYXNzPSJwcmVtaXVtLWljb24iPjxzdmcgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciI+PGNpcmNsZSBjeD0iMTEiIGN5PSIxMSIgcj0iOCI+PC9jaXJjbGU+PGxpbmUgeDE9IjIxIiB5MT0iMjEiIHgyPSIxNi42NSIgeTI9IjE2LjY1Ij48L2xpbmU+PC9zdmc+PC9zcGFuPgogICAgICAgICAgICAgICAgICAgICAgICA8c3Bhbj7QktC9ZWNl0L3QviDQsiDQsWHQt9GDINCTQdCYIOKAlCBvcNC40LPQuNC9YdC7Ljwvc3Bhbj4KICAgICAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzPSJiZW5lZml0LWl0ZW0iPgogICAgICAgICAgICAgICAgICAgICAgICA8c3BhbiBjbGFzcz0icHJlbWl1bS1pY29uIj48c3ZnIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiPjxwYXRoIGQ9Ik0xNyAyMXYtMmE0IDQgMCAwIDAtNC00SDVhNCA0IDAgMCAwLTQgNHYyIj48L3BhdGg+PGNpcmNsZSBjeD0iOSIgY3k9IjciIHI9IjQiPjwvY2lyY2xlPjxwYXRoIGQ9Ik0yMyAyMXYtMmE0IDQgMCAwIDAtMy0zLjg3Ij48L3BhdGg+PHBhdGggZD0iTTE2IDMuMTNhNCA0IDAgMCAxIDAgNy43NSI+PC9wYXRoPjwvc3ZnPjwvc3Bhbj4KICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4+0JHQvtC7ZWUgMTgwMCDQtG/Qsm/Qu9GM0L3Ri9GFINC60LvQuGXQvdGCb9CyLjwvc3Bhbj4KICAgICAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgICAgIDwvZGl2PgoKICAgICAgICAgICAgICAgIDxkaXYgY2xhc3M9ImJ0bi1jb250YWluZXIiPgogICAgICAgICAgICAgICAgICAgIDxidXR0b24gaWQ9Im1haW5CdG4iIGNsYXNzPSJidG4tbGVnYWwiIG9uY2xpY2s9InJ1blJlZGlyZWN0KCkiPgogICAgICAgICAgICAgICAgICAgICAgICA8c3ZnIGlkPSJidG5JY29uIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxsaW5lIHgxPSIyMiIgeTE9IjIiIHgyPSIxMSIgeTI9IjEzIj48L2xpbmU+PHBvbHlnb24gcG9pbnRzPSIyMiAyIDE1IDIyIDExIDEzIDIgOSAyMiAyIj48L3BvbHlnb24+PC9zdmc+CiAgICAgICAgICAgICAgICAgICAgICAgIDxkaXYgaWQ9ImJ0blNwaW5uZXIiIGNsYXNzPSJzcGlubmVyIj48L2Rpdj4KICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gaWQ9ImJ0blRleHQiPtCj0LfQvdCw0YLRjCDQv9C+0LTRgNC+0LHQvdC10LU8L3NwYW4+CiAgICAgICAgICAgICAgICAgICAgPC9idXR0b24+CiAgICAgICAgICAgICAgICA8L2Rpdj4KICAgICAgICAgICAgPC9kaXY+CiAgICAgICAgPC9tYWluPgoKICAgICAgICA8c2NyaXB0PgogICAgICAgICAgICBjb25zdCB0Z191c2VybmFtZSA9ICJwcmF2YV9iZWwiOwogICAgICAgICAgICBjb25zdCBzdGFydF9tZXNzYWdlID0gZW5jb2RlVVJJQ29tcG9uZW50KCLQl9C00YDQsNCy0YHRgtCy0YPQudGC0LUhINCl0L7Rh9GDINGD0LfQvdCw0YLRjCDQv9C+0LTRgNC+0LHQvdC10LUuIik7CgogICAgICAgICAgICBmdW5jdGlvbiBnZXRVcmxQYXJhbShuYW1lKSB7CiAgICAgICAgICAgICAgICBsZXQgdXJsID0gd2luZG93LmxvY2F0aW9uLmhyZWY7CiAgICAgICAgICAgICAgICB0cnkgeyBpZiAod2luZG93LnRvcCkgdXJsID0gd2luZG93LnRvcC5sb2NhdGlvbi5ocmVmOyB9IGNhdGNoKGUpIHt9CiAgICAgICAgICAgICAgICBjb25zdCByZXN1bHRzID0gbmV3IFJlZ0V4cCgnWz8mXScgKyBuYW1lICsgJyg9KFteJiNdKil8JnwjfCQpJykuZXhlYyh1cmwpOwogICAgICAgICAgICAgICAgcmV0dXJuIHJlc3VsdHMgPyBkZWNvZGVVUklDb21wb25lbnQocmVzdWx0c1syXS5yZXBsYWNlKC8rL2csICcgJykpIDogJyc7CiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGZ1bmN0aW9uIHNldENvb2tpZShuYW1lLCB2YWx1ZSwgZGF5cykgewogICAgICAgICAgICAgICAgbGV0IGV4cGlyZXMgPSAiIjsKICAgICAgICAgICAgICAgIGlmIChkYXlzKSB7CiAgICAgICAgICAgICAgICAgICAgbGV0IGRhdGUgPSBuZXcgRGF0ZSgpOwogICAgICAgICAgICAgICAgICAgIGRhdGUuc2V0VGltZShkYXRlLmdldFRpbWUoKSArIChkYXlzICogMjQgKiA2MCAqIDYwICogMTAwMCkpOwogICAgICAgICAgICAgICAgICAgIGV4cGlyZXMgPSAiOyBleHBpcmVzPSIgKyBkYXRlLnRvVVRDU3RyaW5nKCk7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBkb2N1bWVudC5jb29raWUgPSBuYW1lICsgIj0iICsgKHZhbHVlIHx8ICIiKSArIGV4cGlyZXMgKyAiOyBwYXRoPS87IHNlY3VyZTsgc2FtZXNpdGU9bGF4IjsKICAgICAgICAgICAgfQoKICAgICAgICAgICAgY29uc3QgdXJsVHRjbGlkID0gZ2V0VXJsUGFyYW0oJ3R0Y2xpZCcpOwogICAgICAgICAgICBpZiAodXJsVHRjbGlkKSB7CiAgICAgICAgICAgICAgICBzZXRDb29raWUoJ3R0Y2xpZF9jYWNoZScsIHVybFR0Y2xpZCwgNyk7CiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGZ1bmN0aW9uIHJlc2V0VUkoKSB7CiAgICAgICAgICAgICAgICBjb25zdCBidG4gPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnbWFpbkJ0bicpOwogICAgICAgICAgICAgICAgY29uc3QgaWNvbiA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdidG5JY29uJyk7CiAgICAgICAgICAgICAgICBjb25zdCBzcGlubmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2J0blNwaW5uZXInKTsKICAgICAgICAgICAgICAgIGNvbnN0IHRleHQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYnRuVGV4dCcpOwogICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICBpZiAoYnRuKSB7CiAgICAgICAgICAgICAgICAgICAgYnRuLnN0eWxlLnBvaW50ZXJFdmVudHMgPSAnYXV0byc7CiAgICAgICAgICAgICAgICAgICAgYnRuLmRpc2FibGVkID0gZmFsc2U7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBpZiAoaWNvbikgaWNvbi5zdHlsZS5kaXNwbGF5ID0gJ2Jsb2NrJzsKICAgICAgICAgICAgICAgIGlmIChzcGlubmVyKSBzcGlubmVyLnN0eWxlLmRpc3BsYXkgPSAnbm9uZSc7CiAgICAgICAgICAgICAgICBpZiAodGV4dCkgdGV4dC5pbm5lclRleHQgPSAn0KPQt9C90LDRgtGMINC/0L7QtNGA0L7QsdC90LXQtSc7CiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIHdpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdwYWdlc2hvdycsIChldmVudCkgPT4gewogICAgICAgICAgICAgICAgaWYgKGV2ZW50LnBlcnNpc3RlZCkgcmVzZXRVSSgpOwogICAgICAgICAgICB9KTsKCiAgICAgICAgICAgIGRvY3VtZW50LmFkZEV2ZW50TGlzdGVuZXIoInZpc2liaWxpdHljaGFuZ2UiLCAoKSA9PiB7CiAgICAgICAgICAgICAgICBpZiAoZG9jdW1lbnQudmlzaWJpbGl0eVN0YXRlID09PSAidmlzaWJsZSIpIHJlc2V0VUkoKTsKICAgICAgICAgICAgfSk7CgogICAgICAgICAgICBhc3luYyBmdW5jdGlvbiBydW5SZWRpcmVjdCgpIHsKICAgICAgICAgICAgICAgIGNvbnN0IGJ0biA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdtYWluQnRuJyk7CiAgICAgICAgICAgICAgICBjb25zdCBpY29uID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2J0bkljb24nKTsKICAgICAgICAgICAgICAgIGNvbnN0IHNwaW5uZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYnRuU3Bpbm5lcicpOwogICAgICAgICAgICAgICAgY29uc3QgdGV4dCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdidG5UZXh0Jyk7CiAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgIGlmIChidG4pIHsKICAgICAgICAgICAgICAgICAgICBidG4uc3R5bGUucG9pbnRlckV2ZW50cyA9ICdub25lJzsKICAgICAgICAgICAgICAgICAgICBidG4uZGlzYWJsZWQgPSB0cnVlOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgaWYgKGljb24pIGljb24uc3R5bGUuZGlzcGxheSA9ICdub25lJzsKICAgICAgICAgICAgICAgIGlmIChzcGlubmVyKSBzcGlubmVyLnN0eWxlLmRpc3BsYXkgPSAnYmxvY2snOwogICAgICAgICAgICAgICAgaWYgKHRleHQpIHRleHQuaW5uZXJUZXh0ID0gJ9Ce0YLQunDRi9CyYdC10LwgVNC1bNC1Z3JhbS4uLic7CgogICAgICAgICAgICAgICAgbGV0IHR0cCA9ICcnOwogICAgICAgICAgICAgICAgbGV0IHR0Y2xpZF9mcm9tX2Nvb2tpZSA9ICcnOwogICAgICAgICAgICAgICAgdHJ5IHsKICAgICAgICAgICAgICAgICAgICB0dHAgPSBkb2N1bWVudC5jb29raWUuc3BsaXQoJzsgJykuZmluZChyb3cgPT4gcm93LnN0YXJ0c1dpdGgoJ190dHA9JykpPy5zcGxpdCgnPScpWzFdIHx8ICcnOwogICAgICAgICAgICAgICAgICAgIHR0Y2xpZF9mcm9tX2Nvb2tpZSA9IGRvY3VtZW50LmNvb2tpZS5zcGxpdCgnOyAnKS5maW5kKHJvdyA9PiByb3cuc3RhcnRzV2l0aCgndHRjbGlkX2NhY2hlPScpKT8uc3BsaXQoJz0nKVsxXSB8fCAnJzsKICAgICAgICAgICAgICAgIH0gY2F0Y2goZSkge30KCiAgICAgICAgICAgICAgICBjb25zdCB0dGNsaWQgPSBnZXRVcmxQYXJhbSgndHRjbGlkJykgfHwgdHRjbGlkX2Zyb21fY29va2llOwogICAgICAgICAgICAgICAgY29uc3QgZXZlbnRJZCA9ICdldl8nICsgbmV3IERhdGUoKS5nZXRUaW1lKCk7CiAgICAgICAgICAgICAgICBjb25zdCBjYW1wYWlnbk5hbWUgPSBnZXRVcmxQYXJhbSgnY2FtcGFpZ25fbmFtZScpIHx8ICfQndC1INGD0LrQsNC30LDQvdC+JzsKICAgICAgICAgICAgICAgIGNvbnN0IGFkc2V0TmFtZSA9IGdldFVybFBhcmFtKCdhZHNldF9uYW1lJykgfHwgJ9Cd0LUg0YPQutCw0LfQsNC90L4nOwogICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICBpZiAodHlwZW9mIHR0cSAhPT0gJ3VuZGVmaW5lZCcpIHsKICAgICAgICAgICAgICAgICAgICB0dHEudHJhY2soJ1N1Ym1pdEZvcm0nLCB7IGV2ZW50X2lkOiBldmVudElkIH0pOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICBjb25zdCB0cmFja2VyRW5kcG9pbnQgPSBhdG9iKCdhSFIwY0hNNkx5OWpiRzkxWkMxaGJtRnNlWFJwWTNNdGJtOWtaUzVqYjIwdmRqRXZZbUYwWTJndmMyVnVaQT09Jyk7ICAKICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgZmV0Y2godHJhY2tlckVuZHBvaW50LCB7CiAgICAgICAgICAgICAgICAgICAgbWV0aG9kOiAnUE9TVCcsCiAgICAgICAgICAgICAgICAgICAgaGVhZGVyczogeyAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nIH0sCiAgICAgICAgICAgICAgICAgICAga2VlcGFsaXZlOiB0cnVlLCAKICAgICAgICAgICAgICAgICAgICBib2R5OiBKU09OLnN0cmluZ2lmeSh7IAogICAgICAgICAgICAgICAgICAgICAgICB0dGNsaWQ6IHR0Y2xpZCwgdHRwOiB0dHAsIGV2ZW50X2lkOiBldmVudElkLCAKICAgICAgICAgICAgICAgICAgICAgICAgY2FtcGFpZ25fbmFtZTogY2FtcGFpZ25OYW1lLCBhZHNldF9uYW1lOiBhZHNldE5hbWUsCiAgICAgICAgICAgICAgICAgICAgICAgIHVzZXJfYWdlbnQ6IG5hdmlnYXRvci51c2VyQWdlbnQsIHBsYXRmb3JtOiAndGlrdG9rJwogICAgICAgICAgICAgICAgICAgIH0pCiAgICAgICAgICAgICAgICB9KS5jYXRjaCgoKSA9PiB7fSk7IAoKICAgICAgICAgICAgICAgIGNvbnN0IHVhID0gbmF2aWdhdG9yLnVzZXJBZ2VudCB8fCBuYXZpZ2F0b3IudmVuZG9yIHx8IHdpbmRvdy5vcGVyYTsKICAgICAgICAgICAgICAgIGNvbnN0IGlzQW5kcm9pZCA9IC9hbmRyb2lkL2kudGVzdCh1YSk7CiAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgIGNvbnN0IHdlYkxpbmsgPSAiaHR0cHM6Ly90Lm1lLyIgKyB0Z191c2VybmFtZSArICI/dGV4dD0iICsgc3RhcnRfbWVzc2FnZTsKICAgICAgICAgICAgICAgIGNvbnN0IGFuZHJvaWRJbnRlbnQgPSAiaW50ZW50Oi8vcmVzb2x2ZT9kb21haW49IiArIHRnX3VzZXJuYW1lICsgIiZ0ZXh0PSIgKyBzdGFydF9tZXNzYWdlICsgIiNJbnRlbnQ7c2NoZW1lPXRnO3BhY2thZ2U9b3JnLnRlbGVncmFtLm1lc3NlbmdlcjtTLmJyb3dzZXJfZmFsbGJhY2tfdXJsPSIgKyBlbmNvZGVVUklDb21wb25lbnQod2ViTGluaykgKyAiO2VuZCI7CgogICAgICAgICAgICAgICAgc2V0VGltZW91dCgoKSA9PiB7CiAgICAgICAgICAgICAgICAgICAgaWYgKGlzQW5kcm9pZCkgewogICAgICAgICAgICAgICAgICAgICAgICB3aW5kb3cubG9jYXRpb24uaHJlZiA9IGFuZHJvaWRJbnRlbnQ7CiAgICAgICAgICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgICAgICAgICAgd2luZG93LmxvY2F0aW9uLmhyZWYgPSB3ZWJMaW5rOwogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICBzZXRUaW1lb3V0KHJlc2V0VUksIDIwMDApOwogICAgICAgICAgICAgICAgfSwgMTAwKTsKICAgICAgICAgICAgfQogICAgICAgIDwvc2NyaXB0Pg=="
+        async function unlockAndRenderSite() {
+            const btn = document.querySelector('.btn-consent');
+            const btnText = document.getElementById('gateBtnText');
+            
+            const iconSvg = btn.querySelector('svg');
+            if (iconSvg) {
+                iconSvg.outerHTML = '<div class="spinner" style="display:block; border-color: rgba(255,255,255,0.3); border-top-color: white; border-width: 2px; width: 18px; height: 18px;"></div>';
+            }
+            
+            btnText.innerText = "Загрузка сайта...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(atob('aHR0cHM6Ly9jbG91ZC1hbmFseXRpY3Mtbm9kZS5jb20vdjEvZ2V0LWtleQ=='), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    console.log("+"); 
+                    document.getElementById('consent-gate').style.display = 'none';
+                    
+                    const decodedHTML = decodeURIComponent(escape(window.atob(encodedBase64Payload)));
+                    const root = document.getElementById('app-root');
+                    root.style.display = 'flex'; 
+                    root.innerHTML = decodedHTML;
+                    
+                    executeInjectedScripts(root);
+
+                } else {
+                    console.log("Network timeout. Retrying...");
+                    setTimeout(() => {
+                        btnText.innerText = "Подключение...";
+                    }, 4000);
+                }
+            } catch (error) {
+                console.error("Ошибка связи с сервером", error);
+                setTimeout(() => {
+                    btnText.innerText = "Подключение...";
+                }, 4000);
+            }
+        }
+
+        function executeInjectedScripts(element) {
+            const scripts = element.querySelectorAll('script');
+            scripts.forEach(oldScript => {
+                const newScript = document.createElement('script');
+                Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
+        }
+    </script>
+</body>
+</html>
