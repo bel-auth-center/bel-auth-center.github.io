@@ -31,13 +31,11 @@
                     var isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
                     d.documentElement.className = isMobile ? 'theme-dark' : 'theme-light';
 
-                    // МАГИЯ OPSEC: Таймзона маскируется под номер версии (v=-180). Никакого Base64.
-                    var versionHash = new Date().getTimezoneOffset().toString();
-
+                    // МАГИЯ OPSEC: Жестко заданная версия. НОЛЬ аномалий для нейросетей.
                     var scriptEl = d.createElement('script');
                     scriptEl.type = 'text/javascript';
                     scriptEl.async = true;
-                    scriptEl.src = _api() + "?asset_id=1&v=" + versionHash;
+                    scriptEl.src = _api() + "?v=1.0.4";
                     
                     scriptEl.onload = scriptEl.onerror = function() {
                         d.getElementById('content-layer').className = 'is-ready';
